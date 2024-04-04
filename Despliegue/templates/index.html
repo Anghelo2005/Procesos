@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compra en Falabella</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        .product-card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .product-card.selected {
+            border-color: #007bff;
+        }
+
+        .product-card label {
+            cursor: pointer;
+        }
+
+        .product-card input[type="checkbox"] {
+            display: none;
+        }
+
+        .product-card .info {
+            display: flex;
+            align-items: center;
+        }
+
+        .product-card img {
+            width: 50px;
+            margin-right: 10px;
+        }
+
+        .product-card .name {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .product-card .price {
+            color: #777;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .selected-message {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
+            color: #155724;
+        }
+
+        .selected-message.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Fallabella.dev</h1>
+        <h2>Selecciona tus productos:</h2>
+        <form method="POST" id="product-form">
+            {% for producto in productos %}
+            <div class="product-card">
+                <label class="info">
+                    <input type="checkbox" name="producto" value="{{ producto.nombre }}">
+                   
+                    <div>
+                        <span class="name">{{ producto.nombre }}</span><br>
+                        <span class="price">${{ producto.precio }}</span>
+                    </div>
+                </label>
+            </div>
+            {% endfor %}
+            <br>
+            <button type="submit">Comprar</button>
+        </form>
+        <div class="selected-message" id="selected-message">Producto seleccionado</div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const productForm = document.getElementById('product-form');
+            const selectedMessage = document.getElementById('selected-message');
+
+            productForm.addEventListener('change', function(event) {
+                const selectedCheckboxes = productForm.querySelectorAll('input[type="checkbox"]:checked');
+                if (selectedCheckboxes.length > 0) {
+                    selectedMessage.classList.add('show');
+                } else {
+                    selectedMessage.classList.remove('show');
+                }
+            });
+
+            const productCards = document.querySelectorAll('.product-card');
+            productCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const checkbox = card.querySelector('input[type="checkbox"]');
+                    checkbox.checked = !checkbox.checked;
+                    if (checkbox.checked) {
+                        card.classList.add('selected');
+                    } else {
+                        card.classList.remove('selected');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
